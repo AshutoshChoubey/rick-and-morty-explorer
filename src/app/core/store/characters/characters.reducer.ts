@@ -22,7 +22,7 @@ export const initialCharactersState: CharactersState = {
   searchQuery: '',
   viewMode: 'grid',
   selectedCharacterId: null,
-  loading: false,
+  loading: true,
   error: null
 };
 
@@ -47,6 +47,8 @@ export const charactersReducer = createReducer(
   on(CharacterActions.loadCharactersFailure, (state, { error }) => ({
     ...state,
     characters: [],
+    totalCharacters: 0,
+    totalPages: 0,
     loading: false,
     error
   })),

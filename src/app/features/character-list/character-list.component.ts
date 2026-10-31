@@ -461,6 +461,7 @@ export class CharacterListComponent implements OnInit {
 
   clearSearch(): void {
     this.store.dispatch(CharacterActions.setSearchQuery({ query: '' }));
+    this.store.dispatch(CharacterActions.loadCharacters({ page: 1, name: '' }));
   }
 
   setViewMode(viewMode: ViewMode): void {

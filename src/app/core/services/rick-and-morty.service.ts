@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of, catchError, map } from 'rxjs';
+import { Observable, of, catchError, map, retry } from 'rxjs';
 import { Character, CharacterApiResponse } from '../models/character.model';
 import { Episode } from '../models/episode.model';
 
@@ -20,23 +20,28 @@ export class RickAndMortyService {
 
     return this.http.get<CharacterApiResponse>(`${this.baseUrl}/character`, { params }).pipe(
       catchError((error) => {
-        if (error.status === 404) {
+        if (error.status === 404 || (error.status === 0 && trimmed)) {
           return of({
             info: { count: 0, pages: 0, next: null, prev: null },
             results: []
           });
         }
         throw error;
-      })
+      }),
+      retry({ count: 2, delay: 500 })
     );
   }
 
   getCharacterById(id: number | string): Observable<Character> {
-    return this.http.get<Character>(`${this.baseUrl}/character/${id}`);
+    return this.http.get<Character>(`${this.baseUrl}/character/${id}`).pipe(
+      retry({ count: 2, delay: 500 })
+    );
   }
 
   getEpisodeById(id: number | string): Observable<Episode> {
-    return this.http.get<Episode>(`${this.baseUrl}/episode/${id}`);
+    return this.http.get<Episode>(`${this.baseUrl}/episode/${id}`).pipe(
+      retry({ count: 2, delay: 500 })
+    );
   }
 
   getEpisodesByIds(ids: (number | string)[]): Observable<Episode[]> {
@@ -46,6 +51,7 @@ export class RickAndMortyService {
 
     if (ids.length === 1) {
       return this.http.get<Episode>(`${this.baseUrl}/episode/${ids[0]}`).pipe(
+        retry({ count: 2, delay: 500 }),
         map((ep) => [ep]),
         catchError(() => of([]))
       );
@@ -53,6 +59,7 @@ export class RickAndMortyService {
 
     const idsParam = ids.join(',');
     return this.http.get<Episode[]>(`${this.baseUrl}/episode/${idsParam}`).pipe(
+      retry({ count: 2, delay: 500 }),
       map((res) => (Array.isArray(res) ? res : [res])),
       catchError(() => of([]))
     );

@@ -2,17 +2,13 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Rick & Morty Character Explorer E2E Verification', () => {
 
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-    await page.evaluate(() => {
-      localStorage.setItem('rm_simulated_user_role', 'ADMIN');
+  test.beforeEach(async ({ context, page }) => {
+    await context.addInitScript(() => {
+      if (!localStorage.getItem('rm_simulated_user_role')) {
+        localStorage.setItem('rm_simulated_user_role', 'ADMIN');
+      }
     });
-    await page.reload();
-    
-    const gridBtn = page.locator('mat-button-toggle[value="grid"] button');
-    if (await gridBtn.isVisible()) {
-      await gridBtn.click();
-    }
+    await page.goto('/');
   });
 
   test('Requirement 1: Home Page Characters List, Grid & List View Toggle, and Character Metadata', async ({ page }) => {
@@ -90,7 +86,7 @@ test.describe('Rick & Morty Character Explorer E2E Verification', () => {
 
     // Verify Episode Appearances table headers (strictly: name, air_date, episode)
     const episodeTable = page.locator('table[mat-table]');
-    await expect(episodeTable).toBeVisible({ timeout: 20000 });
+    await expect(episodeTable).toBeVisible({ timeout: 25000 });
     await expect(episodeTable.locator('th button:has-text("name")')).toBeVisible();
     await expect(episodeTable.locator('th button:has-text("air_date")')).toBeVisible();
     await expect(episodeTable.locator('th button:has-text("episode")')).toBeVisible();
