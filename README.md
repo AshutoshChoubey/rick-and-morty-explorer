@@ -1,59 +1,180 @@
-# RickAndMortyExplorer
+# Rick & Morty — Character Explorer
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.27.
+A production-grade web application built with **Angular 19**, **NgRx 19** (`@ngrx/store`, `@ngrx/effects`, `@ngrx/store-devtools`), **Angular Material**, **Tailwind CSS**, and **RxJS**, consuming the public [Rick and Morty REST API](https://rickandmortyapi.com/).
 
-## Development server
+---
 
-To start a local development server, run:
+## Features
 
+### 1. Home Page — Character Directory & Search
+- **Grid & List Views:** Toggle between card grid view and a high-performance tabular list view powered by Angular Material Table (`mat-table`) with column definitions: `avatar`, `name`, `status`, `species`, `gender`, `episodes`, and `action`.
+- **Character Metadata:** Every character displays:
+  - High-resolution avatar with status pulse indicator.
+  - Name, species, and gender.
+  - Total episode appearances count.
+  - Character status badge (`Alive`, `Dead`, `unknown`).
+- **Debounced Name Search:** Search bar powered by an RxJS effect pipeline (`debounceTime(350)` and `distinctUntilChanged()`) querying `https://rickandmortyapi.com/api/character?name={name}&page={number}`. Gracefully catches and normalizes API 404 responses when 0 matches are returned.
+- **State Preservation Between Navigation:** Preserves the user's active page number, search query, view mode, and selected character highlight in the NgRx Store when navigating to details and back.
+- **Pagination:** First, Previous, Next, Last, and numeric page jumper controls wired directly into the NgRx state tree.
+
+### 2. Character Details & Episode Table
+- **Dedicated Route (`/character/:id`):** Displays character details, metadata, and episode appearances.
+- **Episode Table:** Implemented using Angular Material Table (`mat-table`) with headers:
+  1. `name`
+  2. `air_date`
+  3. `episode`
+- **Client-Side Free-Form Episode Filtering:** Instant in-memory filtering by episode title, powered by RxJS debouncing (`debounceTime(250)`, `distinctUntilChanged()`) and NgRx memoized selector computation (`selectFilteredEpisodes`).
+- **Column Sorting:** Multi-column sorting on `name`, `air_date`, and `episode`.
+- **Single-Request Batch Episode Resolution:** Optimizes episode loading by parsing episode IDs and querying `https://rickandmortyapi.com/api/episode/{id1,id2,...}` in a single HTTP request instead of issuing multiple sequential round-trips.
+
+### 3. Role-Based Authorization (Admin vs Viewer)
+- **Roles:**
+  - **Admin:** Full access to all routes, character list, and character details.
+  - **Viewer:** Access restricted strictly to the Character List.
+- **Simulated Role Switcher:** Toggle between Admin and Viewer directly from the navigation bar. Persisted to `localStorage` via NgRx `RoleEffects`.
+- **Route Guard:** A functional `roleGuard` (`CanActivateFn`) protects `/character/:id` by querying `selectCanAccessDetails` from the NgRx Store. When a Viewer attempts to access character details, the guard dispatches `RoleActions.notifyAccessDenied` and redirects to `/access-denied`.
+- **Error Messaging:** The `/access-denied` page displays an HTTP 403 Forbidden status, explains the restriction, and includes a 1-click button to promote the session to Admin. A global notification banner also provides inline context.
+
+---
+
+## Tech Stack & Architecture
+
+- **Framework:** Angular 19 (Standalone Components, Signals, `inject()`, Control Flow `@if` / `@for`)
+- **State Management:** **NgRx 19**
+  - Store: `@ngrx/store` with feature slices (`characters`, `characterDetail`, `role`)
+  - Effects: `@ngrx/effects` (`CharactersEffects`, `CharacterDetailEffects`, `RoleEffects`)
+  - DevTools: `@ngrx/store-devtools`
+  - Reactivity Bridge: `store.selectSignal()` for zero-boilerplate template bindings
+- **Component Library:** Angular Material 19 (`@angular/material`, `@angular/cdk`, `@angular/animations`)
+- **Utility Styling:** Tailwind CSS
+- **Reactive Stream Orchestration:** RxJS (`debounceTime`, `distinctUntilChanged`, `switchMap`, `withLatestFrom`, `catchError`, `map`, `filter`, `take`)
+- **Unit Testing:** Jasmine & Karma (23 automated unit tests)
+
+---
+
+## Rick & Morty Endpoints Used
+
+| Purpose | Endpoint | Method |
+| :--- | :--- | :--- |
+| Characters List (Paginated) | `https://rickandmortyapi.com/api/character?page={number}` | `GET` |
+| Search Characters by Name | `https://rickandmortyapi.com/api/character?name={name}&page={number}` | `GET` |
+| Single Character Details | `https://rickandmortyapi.com/api/character/{id}` | `GET` |
+| Single Episode Record | `https://rickandmortyapi.com/api/episode/{id}` | `GET` |
+| Batch Episode Records | `https://rickandmortyapi.com/api/episode/{id1,id2,...}` | `GET` |
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js 20+ or 22+
+- npm 10+
+
+### Install & Run Locally
 ```bash
-ng serve
+# Clone the repository and enter directory
+cd rick-and-morty-explorer
+
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+```
+The application will run at `http://localhost:4200/`.
+
+### Run Unit Tests
+```bash
+npm test -- --watch=false --browsers=ChromeHeadless
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+### Production Build
 ```bash
-ng generate component component-name
+npm run build
 ```
+Build output is generated in `dist/rick-and-morty-explorer/browser`.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
+## Deploying to Cloudflare Pages
+
+This application is pre-configured for instant deployment on **Cloudflare Pages**.
+
+### Cloudflare Pages Settings
+1. **Framework preset:** `None` / `Angular`
+2. **Build command:** `npm run build`
+3. **Build output directory:** `dist/rick-and-morty-explorer/browser`
+4. **Environment Variables:** Set `NODE_VERSION` to `22` (or `20`)
+
+### SPA Routing & Redirects
+A `public/_redirects` file is included:
 ```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
+/*    /index.html   200
 ```
+During build, Angular copies this file directly into the output root (`dist/rick-and-morty-explorer/browser/_redirects`), ensuring that deep routes like `/character/1` and `/access-denied` resolve correctly on direct refresh. Security and caching rules are pre-configured in `public/_headers`.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## Project Structure
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
+src/
+├── app/
+│   ├── app.component.html
+│   ├── app.component.scss
+│   ├── app.component.ts
+│   ├── app.config.ts                 # provideStore, provideEffects, provideStoreDevtools, provideHttpClient
+│   ├── app.routes.ts                 # Route definitions and roleGuard configuration
+│   ├── core/
+│   │   ├── guards/
+│   │   │   ├── role.guard.ts         # Functional CanActivateFn guard backed by NgRx Store
+│   │   │   └── role.guard.spec.ts
+│   │   ├── models/
+│   │   │   ├── character.model.ts
+│   │   │   ├── episode.model.ts
+│   │   │   └── role.model.ts
+│   │   ├── services/
+│   │   │   ├── character-state.service.ts
+│   │   │   ├── rick-and-morty.service.ts
+│   │   │   ├── rick-and-morty.service.spec.ts
+│   │   │   ├── role.service.ts
+│   │   │   └── role.service.spec.ts
+│   │   └── store/
+│   │       ├── characters/           # NgRx: Characters List Slice
+│   │       │   ├── characters.actions.ts
+│   │       │   ├── characters.reducer.ts
+│   │       │   ├── characters.selectors.ts
+│   │       │   └── characters.effects.ts
+│   │       ├── character-detail/     # NgRx: Character Detail & Episodes Slice
+│   │       │   ├── character-detail.actions.ts
+│   │       │   ├── character-detail.reducer.ts
+│   │       │   ├── character-detail.selectors.ts
+│   │       │   └── character-detail.effects.ts
+│   │       └── role/                 # NgRx: Role & Authorization Slice
+│   │           ├── role.actions.ts
+│   │           ├── role.reducer.ts
+│   │           ├── role.selectors.ts
+│   │           └── role.effects.ts
+│   ├── features/
+│   │   ├── access-denied/
+│   │   │   └── access-denied.component.ts
+│   │   ├── character-detail/
+│   │   │   ├── character-detail.component.ts
+│   │   │   └── character-detail.component.spec.ts
+│   │   └── character-list/
+│   │       ├── character-list.component.ts
+│   │       └── character-list.component.spec.ts
+│   └── shared/
+│       └── components/
+│           ├── access-denied-banner/
+│           │   └── access-denied-banner.component.ts
+│           └── navbar/
+│               └── navbar.component.ts
+├── index.html
+├── main.ts
+├── styles.scss
+public/
+├── _headers                          # Cloudflare security & caching rules
+├── _redirects                        # Cloudflare Pages SPA client-side routing
+└── favicon.ico
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
