@@ -1,6 +1,13 @@
 # Rick & Morty — Character Explorer
 
+[![Live Production](https://img.shields.io/badge/Live%20Demo-rm.worldgyan.com-10b981?style=for-the-badge&logo=cloudflare&logoColor=white)](https://rm.worldgyan.com/)
+[![Angular 19](https://img.shields.io/badge/Angular-19.2-dd0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev/)
+[![NgRx 19](https://img.shields.io/badge/NgRx-19.2-ba68c8?style=for-the-badge&logo=ngrx&logoColor=white)](https://ngrx.io/)
+[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+
 A production-grade web application built with **Angular 19**, **NgRx 19** (`@ngrx/store`, `@ngrx/effects`, `@ngrx/store-devtools`), **Angular Material**, **Tailwind CSS**, and **RxJS**, consuming the public [Rick and Morty REST API](https://rickandmortyapi.com/).
+
+> 🚀 **Live Production Deployment:** [https://rm.worldgyan.com/](https://rm.worldgyan.com/)
 
 ---
 
@@ -100,18 +107,21 @@ Build output is generated in `dist/rick-and-morty-explorer/browser`.
 
 ## Deploying to Cloudflare Pages
 
-This application is pre-configured for instant deployment on **Cloudflare Pages**.
+This application is deployed and hosted on **Cloudflare Pages** under the custom domain:
+🌐 **Production URL:** [https://rm.worldgyan.com/](https://rm.worldgyan.com/)
 
 ### Cloudflare Pages Settings
-1. **Framework preset:** `None` / `Angular`
-2. **Build command:** `npm run build`
-3. **Build output directory:** `dist/rick-and-morty-explorer/browser`
-4. **Environment Variables:** Set `NODE_VERSION` to `22` (or `20`)
+1. **Project Name:** `rick-and-morty-explorer` (or custom subdomain `rm`)
+2. **Framework preset:** `None` / `Angular`
+3. **Build command:** `npm run build`
+4. **Build output directory:** `dist/rick-and-morty-explorer/browser`
+5. **Environment Variables:** Set `NODE_VERSION` to `22` (or `20`)
+6. **Custom Domain:** Configured via Cloudflare DNS as `rm.worldgyan.com`
 
-### Cloudflare Pages SPA Routing
-Cloudflare Pages provides native Single Page Application (SPA) routing when no `404.html` exists in the deployment directory. To guarantee zero redirect loop warnings (`code: 100324`) and support edge asset caching:
-- The build script automatically emits both `index.html` and `200.html` to `dist/rick-and-morty-explorer/browser`.
-- Unmatched deep paths (e.g. `/character/1`, `/access-denied`) seamlessly resolve to `index.html` with HTTP 200.
+### Cloudflare Pages SPA Routing & Deep Links
+To guarantee zero redirect loop warnings (`code: 100324`) and flawless deep link routing (`/character/:id`, `/access-denied`):
+- The build script (`npm run build`) automatically outputs `index.html`, `200.html`, and `404.html` into `dist/rick-and-morty-explorer/browser`.
+- Any direct browser hit or page refresh on a sub-route (e.g. `https://rm.worldgyan.com/character/1`) is served seamlessly by the edge, bootstrapping the Angular application.
 - Custom security and caching headers are applied via `public/_headers`.
 
 ---

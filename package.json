@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && node -e \"const fs=require('fs'); if(fs.existsSync('dist/rick-and-morty-explorer/browser/index.html')) fs.copyFileSync('dist/rick-and-morty-explorer/browser/index.html', 'dist/rick-and-morty-explorer/browser/200.html');\"",
+    "build": "ng build && node -e \"const fs=require('fs'), p='dist/rick-and-morty-explorer/browser/index.html'; if(fs.existsSync(p)) { fs.copyFileSync(p, 'dist/rick-and-morty-explorer/browser/200.html'); fs.copyFileSync(p, 'dist/rick-and-morty-explorer/browser/404.html'); }\"",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:e2e": "playwright test"

@@ -1,5 +1,7 @@
 # Architectural Guide & Technical Deep-Dive
 
+> 🌐 **Live Deployed Application:** [https://rm.worldgyan.com/](https://rm.worldgyan.com/)
+
 This document provides a comprehensive architectural breakdown of the **Rick & Morty Character Explorer** application. It details the design rationale, framework primitives, state machine topology, reactive pipelines, and testing harnesses.
 
 ---
