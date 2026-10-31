@@ -20,8 +20,8 @@ export const initialCharacterDetailState: CharacterDetailState = {
   episodeFilter: '',
   sortBy: 'episode',
   sortAsc: true,
-  loadingCharacter: false,
-  loadingEpisodes: false,
+  loadingCharacter: true,
+  loadingEpisodes: true,
   error: null
 };
 

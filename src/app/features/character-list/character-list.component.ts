@@ -1,7 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -428,9 +429,10 @@ import { selectIsAdmin, selectIsViewer } from '../../core/store/role/role.select
     </main>
   `
 })
-export class CharacterListComponent implements OnInit {
+export class CharacterListComponent implements OnInit, OnDestroy {
   private readonly store = inject(Store);
   private readonly router = inject(Router);
+  private readonly subscriptions = new Subscription();
 
   readonly listColumns = ['avatar', 'name', 'status', 'species', 'gender', 'episodes', 'action'];
 
@@ -453,6 +455,13 @@ export class CharacterListComponent implements OnInit {
         name: this.searchQuery()
       })
     );
+
+    const charSub = this.store.select(selectAllCharacters).subscribe();
+    this.subscriptions.add(charSub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   onSearchInput(value: string): void {

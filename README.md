@@ -108,12 +108,11 @@ This application is pre-configured for instant deployment on **Cloudflare Pages*
 3. **Build output directory:** `dist/rick-and-morty-explorer/browser`
 4. **Environment Variables:** Set `NODE_VERSION` to `22` (or `20`)
 
-### SPA Routing & Redirects
-A `public/_redirects` file is included:
-```
-/*    /index.html   200
-```
-During build, Angular copies this file directly into the output root (`dist/rick-and-morty-explorer/browser/_redirects`), ensuring that deep routes like `/character/1` and `/access-denied` resolve correctly on direct refresh. Security and caching rules are pre-configured in `public/_headers`.
+### Cloudflare Pages SPA Routing
+Cloudflare Pages provides native Single Page Application (SPA) routing when no `404.html` exists in the deployment directory. To guarantee zero redirect loop warnings (`code: 100324`) and support edge asset caching:
+- The build script automatically emits both `index.html` and `200.html` to `dist/rick-and-morty-explorer/browser`.
+- Unmatched deep paths (e.g. `/character/1`, `/access-denied`) seamlessly resolve to `index.html` with HTTP 200.
+- Custom security and caching headers are applied via `public/_headers`.
 
 ---
 
@@ -177,6 +176,5 @@ src/
 ├── styles.scss
 public/
 ├── _headers                          # Cloudflare security & caching rules
-├── _redirects                        # Cloudflare Pages SPA client-side routing
 └── favicon.ico
 ```

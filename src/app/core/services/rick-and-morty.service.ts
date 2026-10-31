@@ -51,17 +51,15 @@ export class RickAndMortyService {
 
     if (ids.length === 1) {
       return this.http.get<Episode>(`${this.baseUrl}/episode/${ids[0]}`).pipe(
-        retry({ count: 2, delay: 500 }),
-        map((ep) => [ep]),
-        catchError(() => of([]))
+        retry({ count: 3, delay: 500 }),
+        map((ep) => [ep])
       );
     }
 
     const idsParam = ids.join(',');
     return this.http.get<Episode[]>(`${this.baseUrl}/episode/${idsParam}`).pipe(
-      retry({ count: 2, delay: 500 }),
-      map((res) => (Array.isArray(res) ? res : [res])),
-      catchError(() => of([]))
+      retry({ count: 3, delay: 500 }),
+      map((res) => (Array.isArray(res) ? res : [res]))
     );
   }
 

@@ -129,4 +129,11 @@ describe('CharacterDetailComponent', () => {
     const sortedNames = component.filteredEpisodes().map((e) => e.name);
     expect(sortedNames).toEqual(['Lawnmower Dog', 'Pilot']);
   });
+
+  it('should unsubscribe all subscriptions and clear character details on destroy', () => {
+    expect(component['episodeFilterSub']?.closed).toBeFalse();
+    component.ngOnDestroy();
+    expect(component['episodeFilterSub']?.closed).toBeTrue();
+    expect(component['routeParamSub']?.closed).toBeTrue();
+  });
 });

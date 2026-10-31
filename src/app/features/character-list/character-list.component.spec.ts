@@ -144,4 +144,10 @@ describe('CharacterListComponent', () => {
     expect(component.searchQuery()).toBe('');
     expect(apiServiceSpy.getCharacters).toHaveBeenCalledWith(1, '');
   }));
+
+  it('should clean up subscriptions on ngOnDestroy', () => {
+    expect(component['subscriptions'].closed).toBeFalse();
+    component.ngOnDestroy();
+    expect(component['subscriptions'].closed).toBeTrue();
+  });
 });

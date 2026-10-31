@@ -60,7 +60,7 @@ The application configuration in `angular.json` relies on the modern `@angular-d
    - Employs a Vite-powered development server for instant hot module reloading (HMR).
 2. **Asset Pipeline & Cloudflare Pages Integration:**
    - The `"assets"` configuration maps `public/` into the root of `dist/rick-and-morty-explorer/browser/`.
-   - Copies `_redirects` (`/* /index.html 200`) and `_headers` (CORS and security headers) directly into the deployment bundle, ensuring seamless client-side single-page application (SPA) routing on Cloudflare Pages.
+   - The build process outputs both `index.html` and `200.html` to leverage Cloudflare Pages' native SPA fallback, eliminating redirect loops (`code: 100324`) while preserving deep route resolution (`/character/:id`, `/access-denied`) and applying HTTP headers from `_headers`.
 3. **Style Compilation:**
    - Bundles `@angular/material` azure-blue theme alongside Tailwind CSS (`src/styles.scss`).
 
@@ -442,3 +442,4 @@ Run command:
 ```bash
 npm run test:e2e
 ```
+
