@@ -53,6 +53,16 @@ import { selectIsAdmin, selectIsViewer, selectCurrentRole } from '../../../core/
               <span>Characters</span>
             </a>
 
+            <a 
+              href="https://github.com/AshutoshChoubey/rick-and-morty-explorer" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 border border-slate-800/60 rounded-lg transition-all"
+              title="GitHub Repository (opens in new tab)">
+              <mat-icon class="text-sm !w-4 !h-4 flex items-center justify-center">code</mat-icon>
+              <span>GitHub</span>
+            </a>
+
             <div class="flex items-center bg-slate-900/90 border border-slate-800 rounded-xl p-1 shadow-inner">
               <div class="flex items-center px-2 py-1 text-xs text-slate-400 font-medium border-r border-slate-800 mr-1 hidden sm:flex">
                 <span class="text-[10px] font-mono tracking-wider uppercase text-slate-400">Role:</span>

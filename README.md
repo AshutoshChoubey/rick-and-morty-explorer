@@ -1,13 +1,15 @@
 # Rick & Morty — Character Explorer
 
-[![Live Production](https://img.shields.io/badge/Live%20Demo-rm.worldgyan.com-10b981?style=for-the-badge&logo=cloudflare&logoColor=white)](https://rm.worldgyan.com/)
-[![Angular 19](https://img.shields.io/badge/Angular-19.2-dd0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev/)
-[![NgRx 19](https://img.shields.io/badge/NgRx-19.2-ba68c8?style=for-the-badge&logo=ngrx&logoColor=white)](https://ngrx.io/)
-[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+<p align="left">
+  <a href="https://rm.worldgyan.com/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Live%20Demo-rm.worldgyan.com-10b981?style=for-the-badge&logo=cloudflare&logoColor=white" alt="Live Demo" /></a>
+  <a href="https://angular.dev/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Angular-19.2-dd0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular 19" /></a>
+  <a href="https://ngrx.io/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/NgRx-19.2-ba68c8?style=for-the-badge&logo=ngrx&logoColor=white" alt="NgRx 19" /></a>
+  <a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/TailwindCSS-3.4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" /></a>
+</p>
 
-A production-grade web application built with **Angular 19**, **NgRx 19** (`@ngrx/store`, `@ngrx/effects`, `@ngrx/store-devtools`), **Angular Material**, **Tailwind CSS**, and **RxJS**, consuming the public [Rick and Morty REST API](https://rickandmortyapi.com/).
+A production-grade web application built with **Angular 19**, **NgRx 19** (`@ngrx/store`, `@ngrx/effects`, `@ngrx/store-devtools`), **Angular Material**, **Tailwind CSS**, and **RxJS**, consuming the public <a href="https://rickandmortyapi.com/" target="_blank" rel="noopener noreferrer">Rick and Morty REST API</a>.
 
-> 🚀 **Live Production Deployment:** [https://rm.worldgyan.com/](https://rm.worldgyan.com/)
+> 🚀 **Live Production Deployment:** <a href="https://rm.worldgyan.com/" target="_blank" rel="noopener noreferrer">https://rm.worldgyan.com/</a>
 
 ---
 
@@ -108,7 +110,7 @@ Build output is generated in `dist/rick-and-morty-explorer/browser`.
 ## Deploying to Cloudflare Pages
 
 This application is deployed and hosted on **Cloudflare Pages** under the custom domain:
-🌐 **Production URL:** [https://rm.worldgyan.com/](https://rm.worldgyan.com/)
+🌐 **Production URL:** <a href="https://rm.worldgyan.com/" target="_blank" rel="noopener noreferrer">https://rm.worldgyan.com/</a>
 
 ### Cloudflare Pages Settings
 1. **Project Name:** `rick-and-morty-explorer` (or custom subdomain `rm`)
@@ -121,7 +123,7 @@ This application is deployed and hosted on **Cloudflare Pages** under the custom
 ### Cloudflare Pages SPA Routing & Deep Links
 To guarantee zero redirect loop warnings (`code: 100324`) and flawless deep link routing (`/character/:id`, `/access-denied`):
 - The build script (`npm run build`) automatically outputs `index.html`, `200.html`, and `404.html` into `dist/rick-and-morty-explorer/browser`.
-- Any direct browser hit or page refresh on a sub-route (e.g. `https://rm.worldgyan.com/character/1`) is served seamlessly by the edge, bootstrapping the Angular application.
+- Any direct browser hit or page refresh on a sub-route (e.g. <a href="https://rm.worldgyan.com/character/1" target="_blank" rel="noopener noreferrer">https://rm.worldgyan.com/character/1</a>) is served seamlessly by the edge, bootstrapping the Angular application.
 - Custom security and caching headers are applied via `public/_headers`.
 
 ---
