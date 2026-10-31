@@ -39,6 +39,8 @@ A production-grade web application built with **Angular 19**, **NgRx 19** (`@ngr
 
 ## Tech Stack & Architecture
 
+> For an in-depth breakdown of `angular.json`, `main.ts`, `app.config.ts`, route guards, NgRx operators (`ofType`, `switchMap`), and component design decisions, refer to [ARCHITECTURE.md](./ARCHITECTURE.md).
+
 - **Framework:** Angular 19 (Standalone Components, Signals, `inject()`, Control Flow `@if` / `@for`)
 - **State Management:** **NgRx 19**
   - Store: `@ngrx/store` with feature slices (`characters`, `characterDetail`, `role`)
